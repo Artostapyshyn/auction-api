@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,9 +31,10 @@ public class Auction {
     @Column(name = "start_price", nullable = false)
     private BigDecimal startPrice;
 
-    @Lob
+    @ElementCollection
+    @CollectionTable(name = "auction_photos")
     @Column(name = "photos")
-    private List<byte[]> photos = new ArrayList<>();
+    private List<byte[]> photos;
 
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;

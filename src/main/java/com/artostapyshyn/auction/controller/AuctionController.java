@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class AuctionController {
 
     private final AuctionService auctionService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Operation(summary = "Create auction")
     @PostMapping("/create")
     public ResponseEntity<Auction> createAuction(@NotNull @RequestBody AuctionDto auctionDto) {
@@ -58,6 +60,7 @@ public class AuctionController {
         return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Operation(summary = "Edit auction")
     @PutMapping("/edit")
     public ResponseEntity<Auction> editAuction(@NotNull @RequestBody AuctionDto auctionDto) {
