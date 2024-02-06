@@ -12,6 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -54,4 +55,10 @@ public class User {
     @ColumnDefault("'ROLE_USER'")
     @Column(name = "role", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Bid> bids;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Auction> ownedAuctions;
 }

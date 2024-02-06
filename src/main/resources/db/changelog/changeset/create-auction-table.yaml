@@ -1,0 +1,150 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1707241402382-1
+      author: Artur
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auction
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: description
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: start_price
+                  type: DECIMAL
+              - column:
+                  name: photos
+                  type: LONGBLOB
+              - column:
+                  constraints:
+                    nullable: false
+                  name: end_date
+                  type: DATETIME
+              - column:
+                  constraints:
+                    nullable: false
+                  name: owner_id
+                  type: BIGINT
+            tableName: auction
+  - changeSet:
+      id: 1707242140552-5
+      author: Artur
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: owner_id
+            baseTableName: auction
+            constraintName: FK_AUCTION_ON_OWNER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1707241402382-2
+      author: Artur
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auction_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: bids_id
+                  type: BIGINT
+            tableName: auction_bids
+  - changeSet:
+      id: 1707241402382-3
+      author: Artur
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_bid
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: price
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: date
+                  type: DATETIME
+              - column:
+                  name: auction_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: bid
+  - changeSet:
+      id: 1707241402382-4
+      author: Artur
+      changes:
+        - addUniqueConstraint:
+            columnNames: bids_id
+            constraintName: uc_auction_bids_bids
+            tableName: auction_bids
+  - changeSet:
+      id: 1707241402382-5
+      author: Artur
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auction_id
+            baseTableName: bid
+            constraintName: FK_BID_ON_AUCTION
+            referencedColumnNames: id
+            referencedTableName: auction
+  - changeSet:
+      id: 1707241402382-6
+      author: Artur
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: bid
+            constraintName: FK_BID_ON_USER
+            referencedColumnNames: id
+            referencedTableName: users
+  - changeSet:
+      id: 1707241402382-7
+      author: Artur
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auction_id
+            baseTableName: auction_bids
+            constraintName: fk_aucbid_on_auction
+            referencedColumnNames: id
+            referencedTableName: auction
+  - changeSet:
+      id: 1707241402382-8
+      author: Artur
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: bids_id
+            baseTableName: auction_bids
+            constraintName: fk_aucbid_on_bid
+            referencedColumnNames: id
+            referencedTableName: bid
