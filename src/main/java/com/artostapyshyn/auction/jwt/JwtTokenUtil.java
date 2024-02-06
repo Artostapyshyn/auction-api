@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-@Log4j2
 @AllArgsConstructor
 public class JwtTokenUtil implements Serializable {
 
