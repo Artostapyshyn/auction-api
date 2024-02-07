@@ -2,6 +2,7 @@ package com.artostapyshyn.auction.controller;
 
 import com.artostapyshyn.auction.dto.AuctionDto;
 import com.artostapyshyn.auction.model.Auction;
+import com.artostapyshyn.auction.model.Bid;
 import com.artostapyshyn.auction.service.AuctionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
@@ -54,10 +55,17 @@ public class AuctionController {
     }
 
     @Operation(summary = "Get auction by start price")
-    @GetMapping("/startPrice")
+    @GetMapping("/start-price")
     public ResponseEntity<Auction> getAuctionByStartPrice(@NotNull @RequestParam BigDecimal startPrice) {
         Auction auction = auctionService.findByStartPrice(startPrice);
         return new ResponseEntity<>(auction, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get bids history")
+    @GetMapping("/bids")
+    public ResponseEntity<List<Bid>> getBidHistory(@RequestParam("auctionId") Long auctionId) {
+        List<Bid> bidHistory = auctionService.getBidHistory(auctionId);
+        return new ResponseEntity<>(bidHistory, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")

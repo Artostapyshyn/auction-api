@@ -3,6 +3,7 @@ package com.artostapyshyn.auction.service.impl;
 import com.artostapyshyn.auction.dto.AuctionDto;
 import com.artostapyshyn.auction.exception.AuctionNotFoundException;
 import com.artostapyshyn.auction.model.Auction;
+import com.artostapyshyn.auction.model.Bid;
 import com.artostapyshyn.auction.repository.AuctionRepository;
 import com.artostapyshyn.auction.service.AuctionService;
 import com.artostapyshyn.auction.service.UserService;
@@ -61,6 +62,14 @@ public class AuctionServiceImpl implements AuctionService {
             modelMapper.map(auctionDto, existingAuction);
         }
         auctionRepository.save(existingAuction);
+    }
+
+    @Override
+    public List<Bid> getBidHistory(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(AuctionNotFoundException::new);
+
+        return auction.getBids();
     }
 
 }
