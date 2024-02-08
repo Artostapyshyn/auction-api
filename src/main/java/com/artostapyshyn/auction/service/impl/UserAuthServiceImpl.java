@@ -27,7 +27,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         Map<String, Object> responseMap = new HashMap<>();
 
         String token = userService.signUpUserAndGenerateToken(signUpDto);
-        responseMap.put("email", signUpDto.email());
+        responseMap.put("email", signUpDto.getEmail());
         responseMap.put("message", "Account created successfully");
         responseMap.put("token", token);
         return ResponseEntity.ok(responseMap);

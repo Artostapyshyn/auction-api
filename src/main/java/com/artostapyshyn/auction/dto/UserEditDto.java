@@ -1,5 +1,17 @@
 package com.artostapyshyn.auction.dto;
 
-public record UserEditDto(String firstName, String lastName,
-                          String city, String photoBytes) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserEditDto {
+    private String firstName;
+    private String lastName;
+    private String city;
+    private String photoBytes;
 }

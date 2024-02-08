@@ -52,8 +52,8 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Bid placeBid(User user, BidDto bidDto) {
-        Auction auction = auctionRepository.findById(bidDto.auctionId()).orElseThrow(AuctionNotFoundException::new);
-        BigDecimal bidAmount = bidDto.amount();
+        Auction auction = auctionRepository.findById(bidDto.getAuctionId()).orElseThrow(AuctionNotFoundException::new);
+        BigDecimal bidAmount = bidDto.getAmount();
         if (auction.getEndDate().isAfter(LocalDateTime.now())) {
             if (auction.getBids().isEmpty() || bidAmount.compareTo(getCurrentHighestBid(auction)) > 0) {
                 Bid bid = new Bid();

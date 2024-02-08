@@ -64,22 +64,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String signUpUserAndGenerateToken(SignUpDto signUpDto) {
-        if (userRepository.findByEmail(signUpDto.email()).isPresent()) {
+        if (userRepository.findByEmail(signUpDto.getEmail()).isPresent()) {
             throw new RuntimeException("User with this email already exists");
         }
         User user = modelMapper.map(signUpDto, User.class);
-        user.setPassword(encodePassword(signUpDto.password()));
+        user.setPassword(encodePassword(signUpDto.getPassword()));
         userRepository.save(user);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(signUpDto.email());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(signUpDto.getEmail());
         return jwtTokenUtil.generateToken(userDetails);
     }
 
 
     @Override
     public String loginAndGenerateToken(LoginDto loginDto) {
-        userRepository.findByEmail(loginDto.email()).orElseThrow(UserNotFoundException::new);
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.email());
+        userRepository.findByEmail(loginDto.getEmail()).orElseThrow(UserNotFoundException::new);
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.getEmail());
         return jwtTokenUtil.generateToken(userDetails);
     }
 

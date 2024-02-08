@@ -1,6 +1,7 @@
 package com.artostapyshyn.auction.service.impl;
 
 import com.artostapyshyn.auction.dto.AuctionDto;
+import com.artostapyshyn.auction.dto.BidDto;
 import com.artostapyshyn.auction.exception.AuctionNotFoundException;
 import com.artostapyshyn.auction.model.Auction;
 import com.artostapyshyn.auction.model.Bid;
@@ -13,15 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AuctionServiceImpl implements AuctionService {
 
     private final AuctionRepository auctionRepository;
-
     private final UserService userService;
-
     private final ModelMapper modelMapper;
 
     @Override
@@ -32,44 +32,51 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<Auction> findAll() {
-        return auctionRepository.findAll();
+    public List<AuctionDto> findAll() {
+        List<Auction> auctions = auctionRepository.findAll();
+        return auctions.stream()
+                .map(auction -> modelMapper.map(auction, AuctionDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Auction findById(Long id) {
-        return auctionRepository.findById(id).orElseThrow(AuctionNotFoundException::new);
+    public AuctionDto findById(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow(AuctionNotFoundException::new);
+        return modelMapper.map(auction, AuctionDto.class);
     }
 
     @Override
-    public Auction findByName(String name) {
-        return auctionRepository.findByName(name).orElseThrow(AuctionNotFoundException::new);
+    public AuctionDto findByName(String name) {
+        Auction auction = auctionRepository.findByName(name).orElseThrow(AuctionNotFoundException::new);
+        return modelMapper.map(auction, AuctionDto.class);
     }
 
     @Override
-    public Auction findByStartPrice(BigDecimal startPrice) {
-        return auctionRepository.findByStartPrice(startPrice).orElseThrow(AuctionNotFoundException::new);
+    public AuctionDto findByStartPrice(BigDecimal startPrice) {
+        Auction auction = auctionRepository.findByStartPrice(startPrice).orElseThrow(AuctionNotFoundException::new);
+        return modelMapper.map(auction, AuctionDto.class);
     }
 
     @Override
     public void editAuction(AuctionDto auctionDto) {
-
-        Auction existingAuction = auctionRepository.findById(auctionDto.id())
+        Auction existingAuction = auctionRepository.findById(auctionDto.getId())
                 .orElseThrow(AuctionNotFoundException::new);
 
         if(existingAuction.getOwner() == userService.getAuthenticatedPerson()) {
             modelMapper.getConfiguration().setSkipNullEnabled(true);
             modelMapper.map(auctionDto, existingAuction);
+            auctionRepository.save(existingAuction);
         }
-        auctionRepository.save(existingAuction);
     }
 
     @Override
-    public List<Bid> getBidHistory(Long auctionId) {
+    public List<BidDto> getBidHistory(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(AuctionNotFoundException::new);
 
-        return auction.getBids();
+        List<Bid> bids = auction.getBids();
+        return bids.stream()
+                .map(bid -> modelMapper.map(bid, BidDto.class))
+                .collect(Collectors.toList());
     }
-
 }

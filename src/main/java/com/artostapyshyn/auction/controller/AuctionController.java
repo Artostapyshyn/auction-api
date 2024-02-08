@@ -1,6 +1,7 @@
 package com.artostapyshyn.auction.controller;
 
 import com.artostapyshyn.auction.dto.AuctionDto;
+import com.artostapyshyn.auction.dto.BidDto;
 import com.artostapyshyn.auction.model.Auction;
 import com.artostapyshyn.auction.model.Bid;
 import com.artostapyshyn.auction.service.AuctionService;
@@ -35,36 +36,36 @@ public class AuctionController {
 
     @Operation(summary = "Get all auctions")
     @GetMapping("/all")
-    public ResponseEntity<List<Auction>> getAllAuctions() {
-        List<Auction> auctions = auctionService.findAll();
+    public ResponseEntity<List<AuctionDto>> getAllAuctions() {
+        List<AuctionDto> auctions = auctionService.findAll();
         return new ResponseEntity<>(auctions, HttpStatus.OK);
     }
 
     @Operation(summary = "Get auction by id")
     @GetMapping("/get-by-id")
-    public ResponseEntity<Auction> getAuctionById(@NotNull @RequestParam Long id) {
-        Auction auction = auctionService.findById(id);
+    public ResponseEntity<AuctionDto> getAuctionById(@NotNull @RequestParam Long id) {
+        AuctionDto auction = auctionService.findById(id);
         return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 
     @Operation(summary = "Get auction by name")
     @GetMapping("/name")
-    public ResponseEntity<Auction> getAuctionByName(@NotNull @RequestParam String name) {
-        Auction auction = auctionService.findByName(name);
+    public ResponseEntity<AuctionDto> getAuctionByName(@NotNull @RequestParam String name) {
+        AuctionDto auction = auctionService.findByName(name);
         return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 
     @Operation(summary = "Get auction by start price")
     @GetMapping("/start-price")
-    public ResponseEntity<Auction> getAuctionByStartPrice(@NotNull @RequestParam BigDecimal startPrice) {
-        Auction auction = auctionService.findByStartPrice(startPrice);
+    public ResponseEntity<AuctionDto> getAuctionByStartPrice(@NotNull @RequestParam BigDecimal startPrice) {
+        AuctionDto auction = auctionService.findByStartPrice(startPrice);
         return new ResponseEntity<>(auction, HttpStatus.OK);
     }
 
     @Operation(summary = "Get bids history")
     @GetMapping("/bids")
-    public ResponseEntity<List<Bid>> getBidHistory(@RequestParam("auctionId") Long auctionId) {
-        List<Bid> bidHistory = auctionService.getBidHistory(auctionId);
+    public ResponseEntity<List<BidDto>> getBidHistory(@RequestParam("auctionId") Long auctionId) {
+        List<BidDto> bidHistory = auctionService.getBidHistory(auctionId);
         return new ResponseEntity<>(bidHistory, HttpStatus.OK);
     }
 
