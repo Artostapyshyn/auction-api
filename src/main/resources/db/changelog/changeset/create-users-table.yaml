@@ -32,7 +32,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: user_photo
-                  type: bytea
+                  type: TEXT
               - column:
                   constraints:
                     nullable: false

@@ -30,7 +30,7 @@ databaseChangeLog:
                   type: DECIMAL
               - column:
                   name: photos
-                  type: LONGBLOB
+                  type: TEXT
               - column:
                   constraints:
                     nullable: false
