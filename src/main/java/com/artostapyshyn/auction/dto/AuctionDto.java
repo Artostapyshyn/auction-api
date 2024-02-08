@@ -12,7 +12,7 @@ public record AuctionDto(Long id,
                          String description,
                          @NotBlank(message = "Start price is required")
                          String startPrice,
-                         List<byte[]> photos,
+                         List<String> photos,
                          @NotBlank(message = "End date is required")
                          LocalDateTime endDate){
 }

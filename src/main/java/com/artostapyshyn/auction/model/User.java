@@ -36,8 +36,8 @@ public class User {
     private String city;
 
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "user_photo", nullable = false)
-    private byte[] photoBytes;
+    @Column(name = "user_photo")
+    private String photoBytes;
 
     @Email
     @Column(name = "email", unique = true, nullable = false)

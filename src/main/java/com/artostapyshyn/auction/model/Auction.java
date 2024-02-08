@@ -34,7 +34,7 @@ public class Auction {
     @ElementCollection
     @CollectionTable(name = "auction_photos")
     @Column(name = "photos")
-    private List<byte[]> photos;
+    private List<String> photos;
 
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
