@@ -25,10 +25,11 @@ public class AuctionServiceImpl implements AuctionService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Auction createAuction(AuctionDto auctionDto) {
+    public AuctionDto createAuction(AuctionDto auctionDto) {
         Auction auction = modelMapper.map(auctionDto, Auction.class);
         auction.setOwner(userService.getAuthenticatedPerson());
-        return auctionRepository.save(auction);
+        auctionRepository.save(auction);
+        return auctionDto;
     }
 
     @Override

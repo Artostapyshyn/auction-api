@@ -1,5 +1,6 @@
 package com.artostapyshyn.auction.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class Bid {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "auction_id")
     private Auction auction;

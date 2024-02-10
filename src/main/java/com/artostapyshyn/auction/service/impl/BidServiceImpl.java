@@ -1,6 +1,7 @@
 package com.artostapyshyn.auction.service.impl;
 
 import com.artostapyshyn.auction.dto.BidDto;
+import com.artostapyshyn.auction.dto.PlacedBidDto;
 import com.artostapyshyn.auction.exception.AuctionClosedException;
 import com.artostapyshyn.auction.exception.AuctionNotFoundException;
 import com.artostapyshyn.auction.exception.BidNotFoundException;
@@ -13,6 +14,7 @@ import com.artostapyshyn.auction.repository.BidRepository;
 import com.artostapyshyn.auction.service.BidService;
 import com.artostapyshyn.auction.service.UserService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,10 +29,14 @@ public class BidServiceImpl implements BidService {
     private final BidRepository bidRepository;
     private final UserService userService;
     private final AuctionRepository auctionRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public List<Bid> findAllByAuctionId(Long auctionId) {
-        return bidRepository.findAllByAuctionId(auctionId);
+    public List<PlacedBidDto> findAllByAuctionId(Long auctionId) {
+        List<Bid> bids = bidRepository.findAllByAuctionId(auctionId);
+        return bids.stream()
+                .map(bid -> modelMapper.map(bid, PlacedBidDto.class))
+                .toList();
     }
 
     @Override
@@ -39,31 +45,33 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
-    public Bid getMaxBid(Long auctionId) {
+    public PlacedBidDto getMaxBid(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(AuctionNotFoundException::new);
 
         return auction.getBids().stream()
                 .max(Comparator.comparing(Bid::getPrice))
+                .map(bid -> modelMapper.map(bid, PlacedBidDto.class))
                 .orElseThrow(BidNotFoundException::new);
     }
 
 
     @Override
     public void delete(Long id) {
-        Bid bid = findById(id);
-        if(userService.getAuthenticatedPerson() == bid.getUser()) {
+        Bid bid = bidRepository.findById(id).orElseThrow(BidNotFoundException::new);
+        if (userService.getAuthenticatedPerson() == bid.getUser()) {
             bidRepository.deleteById(id);
         }
     }
 
     @Override
-    public Bid findById(Long id) {
-        return bidRepository.findById(id).orElseThrow(BidNotFoundException::new);
+    public PlacedBidDto findById(Long id) {
+        Bid bid = bidRepository.findById(id).orElseThrow(BidNotFoundException::new);
+        return modelMapper.map(bid, PlacedBidDto.class);
     }
 
     @Override
-    public Bid placeBid(User user, BidDto bidDto) {
+    public PlacedBidDto placeBid(User user, BidDto bidDto) {
         Auction auction = auctionRepository.findById(bidDto.getAuctionId()).orElseThrow(AuctionNotFoundException::new);
         BigDecimal bidAmount = bidDto.getAmount();
         if (auction.getEndDate().isAfter(LocalDateTime.now())) {
@@ -73,9 +81,11 @@ public class BidServiceImpl implements BidService {
                 bid.setAuction(auction);
                 bid.setPrice(bidAmount);
 
+                bidRepository.save(bid);
+
                 auction.getBids().add(bid);
                 auctionRepository.save(auction);
-                return bid;
+                return modelMapper.map(bid, PlacedBidDto.class);
             } else {
                 throw new InvalidBidException("Bid amount must be greater than the current highest bid");
             }

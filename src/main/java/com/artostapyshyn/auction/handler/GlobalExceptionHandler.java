@@ -1,5 +1,7 @@
 package com.artostapyshyn.auction.handler;
 
+import com.artostapyshyn.auction.exception.AuctionClosedException;
+import com.artostapyshyn.auction.exception.InvalidBidException;
 import com.artostapyshyn.auction.exception.UserNotFoundException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.log4j.Log4j2;
@@ -16,6 +18,18 @@ import java.security.SignatureException;
 @Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(InvalidBidException.class)
+    public ResponseEntity<Object> handleInvalidBidException(InvalidBidException ex) {
+        log.error("Invalid bid", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bid amount must be greater than the current highest bid");
+    }
+
+    @ExceptionHandler(AuctionClosedException.class)
+    public ResponseEntity<Object> handleAuctionClosedException(AuctionClosedException ex) {
+        log.error("Auction is closed", ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Auction is closed");
+    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {

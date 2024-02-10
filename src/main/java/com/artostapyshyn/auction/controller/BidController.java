@@ -1,7 +1,7 @@
 package com.artostapyshyn.auction.controller;
 
 import com.artostapyshyn.auction.dto.BidDto;
-import com.artostapyshyn.auction.model.Bid;
+import com.artostapyshyn.auction.dto.PlacedBidDto;
 import com.artostapyshyn.auction.service.BidService;
 import com.artostapyshyn.auction.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,14 +25,14 @@ public class BidController {
 
     @Operation(summary = "Get all bids")
     @GetMapping
-    public ResponseEntity<List<Bid>> getAllBids(@RequestParam("auctionId") Long auctionId) {
+    public ResponseEntity<List<PlacedBidDto>> getAllBids(@RequestParam("auctionId") Long auctionId) {
         return ResponseEntity.ok(bidService.findAllByAuctionId(auctionId));
     }
 
     @Operation(summary = "Place bid")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/place")
-    public ResponseEntity<Bid> placeBid(@RequestBody BidDto bidDto) {
+    public ResponseEntity<PlacedBidDto> placeBid(@RequestBody BidDto bidDto) {
         return ResponseEntity.ok(bidService.placeBid(userService.getAuthenticatedPerson(), bidDto));
     }
 
@@ -46,7 +46,7 @@ public class BidController {
 
     @Operation(summary = "Get max bid")
     @GetMapping("/max")
-    public ResponseEntity<Bid> getMaxBid(@RequestParam("auctionId") Long auctionId) {
+    public ResponseEntity<PlacedBidDto> getMaxBid(@RequestParam("auctionId") Long auctionId) {
         return ResponseEntity.ok(bidService.getMaxBid(auctionId));
     }
 }

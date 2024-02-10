@@ -2,8 +2,6 @@ package com.artostapyshyn.auction.controller;
 
 import com.artostapyshyn.auction.dto.AuctionDto;
 import com.artostapyshyn.auction.dto.BidDto;
-import com.artostapyshyn.auction.model.Auction;
-import com.artostapyshyn.auction.model.Bid;
 import com.artostapyshyn.auction.service.AuctionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.NotNull;
@@ -29,9 +27,8 @@ public class AuctionController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Operation(summary = "Create auction")
     @PostMapping("/create")
-    public ResponseEntity<Auction> createAuction(@NotNull @RequestBody AuctionDto auctionDto) {
-        Auction createdAuction = auctionService.createAuction(auctionDto);
-        return new ResponseEntity<>(createdAuction, HttpStatus.OK);
+    public ResponseEntity<AuctionDto> createAuction(@NotNull @RequestBody AuctionDto auctionDto) {
+        return new ResponseEntity<>(auctionService.createAuction(auctionDto), HttpStatus.OK);
     }
 
     @Operation(summary = "Get all auctions")
@@ -72,7 +69,7 @@ public class AuctionController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @Operation(summary = "Edit auction")
     @PutMapping("/edit")
-    public ResponseEntity<Auction> editAuction(@NotNull @RequestBody AuctionDto auctionDto) {
+    public ResponseEntity<AuctionDto> editAuction(@NotNull @RequestBody AuctionDto auctionDto) {
         auctionService.editAuction(auctionDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
