@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -36,6 +37,17 @@ public class BidServiceImpl implements BidService {
     public Bid save(Bid bid) {
         return bidRepository.save(bid);
     }
+
+    @Override
+    public Bid getMaxBid(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(AuctionNotFoundException::new);
+
+        return auction.getBids().stream()
+                .max(Comparator.comparing(Bid::getPrice))
+                .orElseThrow(BidNotFoundException::new);
+    }
+
 
     @Override
     public void delete(Long id) {

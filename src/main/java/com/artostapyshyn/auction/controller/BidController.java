@@ -43,4 +43,10 @@ public class BidController {
         bidService.delete(bidId);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Get max bid")
+    @GetMapping("/max")
+    public ResponseEntity<Bid> getMaxBid(@RequestParam("auctionId") Long auctionId) {
+        return ResponseEntity.ok(bidService.getMaxBid(auctionId));
+    }
 }

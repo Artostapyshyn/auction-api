@@ -11,6 +11,8 @@ public interface BidService {
 
     Bid save(Bid bid);
 
+    Bid getMaxBid(Long auctionId);
+
     void delete(Long id);
 
     Bid findById(Long id);
