@@ -15,6 +15,10 @@
     <li>Jackson</li>
   </ul>
 
+<h2>Usage</h2>
+
+<p>To interact with the API, you can use the following base URL:</p>
+<a href="https://auction-api-hvbv.onrender.com">https://auction-api-hvbv.onrender.com</a>
 
 # Auction API Documentation
 
