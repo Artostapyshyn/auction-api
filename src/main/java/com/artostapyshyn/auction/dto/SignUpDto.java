@@ -1,5 +1,6 @@
 package com.artostapyshyn.auction.dto;
 
+import com.artostapyshyn.auction.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -28,4 +29,6 @@ public class SignUpDto {
     private String city;
 
     private byte[] photoBytes;
+
+    private Role role;
 }
